@@ -3,3 +3,5 @@ node_modules
 dist
 .env.js
 db.json
+delish-dish.sublime-project
+delish-dish.sublime-workspace
