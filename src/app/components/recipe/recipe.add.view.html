@@ -1,0 +1,32 @@
+<h3>Add New Recipe</h3>
+
+<input type="text" class="input" ng-model="$ctrl.newRecipe.name" placeholder="Recipe Title" />
+<input type="text" class="input" ng-model="$ctrl.newRecipe.calorie_count" placeholder="Calorie Count" />
+
+<div class="suggestionInput" ng-blur="$ctrl.toggleIngredientSuggestions(false)">
+    <input type="text" class="input"  ng-change="$ctrl.checkIfIngredientSuggestionsShouldShow()" ng-model="$ctrl.newIngredient.name" placeholder="Ingredient Name" />
+    <div class="suggestionContainer" ng-show="$ctrl.showIngredientSuggestions">
+        <div class="suggestionItem color-green" ng-click="$ctrl.updateIngredientField(ingredient)" ng-repeat="ingredient in $ctrl.ingredientSuggestions | filter:$ctrl.newIngredient.name">{{ingredient.name}}</div>
+    </div>
+</div>
+
+<input type="text" class="input" ng-model="$ctrl.newIngredient.quantity" placeholder="Quantity" />
+
+<div class="suggestionInput" ng-blur="$ctrl.toggleQuantityTypeSuggestions(false)" >
+    <input type="text" class="input" ng-change="$ctrl.checkIfQuantityTypeSuggestionsShouldShow()" ng-model="$ctrl.newIngredient.quantity_type" placeholder="Quantity Type" />
+    <div class="suggestionContainer" ng-show="$ctrl.showQuantityTypeSuggestions">
+        <div class="suggestionItem color-green" ng-click="$ctrl.updateQuantityTypeField(quantityType)" ng-repeat="quantityType in $ctrl.quantityTypeSuggestions | filter:$ctrl.newIngredient.quantity_type">{{quantityType.name}}</div>
+    </div>
+</div>
+
+<button class="button color-pink" ng-click="$ctrl.addIngredient($ctrl.newRecipe)">Add Ingredient</button>
+
+<div ng-repeat="ingredient in $ctrl.newRecipe.ingredients track by $index">
+    <div class="link-item">{{ingredient.name}}  {{ingredient.quantity}}  {{ingredient.quantity_type}}</div>
+    <div class="link-item-action" ng-click="$ctrl.removeIngredient($ctrl.newRecipe, $index)">x</div>
+</div>
+
+<button class="button color-pink" ng-click="$ctrl.addRecipe()">Done!</button>
+
+
+

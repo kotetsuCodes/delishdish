@@ -1,0 +1,7 @@
+<div>
+    <h3>Recipes in {{$ctrl.shoppinglistName}}</h3>
+    <div  ng-repeat="recipe in $ctrl.recipes">
+        <div ui-sref="base.recipes.editrecipe({id: recipe.id})" class="link-item">{{recipe.name}}</div>
+        <div class="link-item-action" ng-click="">x</div>
+        <div ng-repeat="ingredient in recipe.ingredients">{{ingredient.name}} - {{ingredient.quantity}} {{ingredient.quantity_type}}</div>
+</div>

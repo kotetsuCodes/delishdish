@@ -1,0 +1,17 @@
+<h3>Add Shopping List</h3>
+
+<input type="text" ng-model="$ctrl.newShoppinglist.name" placeholder="List Name">
+<input type="text" ng-model="searchText" placeholder="Search for recipes...">
+
+<div ng-repeat="recipe in $ctrl.newShoppinglist.recipes track by $index">
+    <div class="link-item" >{{recipe}}</div>
+    <div class="link-item-action" ng-click="$ctrl.removeRecipeFromShoppinglist($ctrl.newShoppinglist, $index)">x</div>
+</div>
+
+
+<div ng-repeat="recipe in $ctrl.recipes | filter:searchText">
+    <div class="link-item" >{{recipe.name}}</div>
+    <div class="link-item-action" ng-click="$ctrl.addRecipeToShoppinglist($ctrl.newShoppinglist, recipe)">+</div>
+</div>
+
+<button class="button block color-darkturquoise" ng-click="$ctrl.saveShoppinglist()">Done!</button>

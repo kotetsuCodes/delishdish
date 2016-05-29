@@ -1,0 +1,9 @@
+<h3>Recipes</h3>
+
+<div ng-repeat="recipe in $ctrl.recipes">
+	<div class="link-item" ui-sref="base.recipes.editrecipe({id: recipe.id})">{{recipe.name}}</div>
+    <div class="link-item-action" ng-click="$ctrl.removeRecipe($index)">x</div>
+</div>
+
+<button class="button color-pink" ui-sref="base.recipes.addrecipe()">+</button>
+

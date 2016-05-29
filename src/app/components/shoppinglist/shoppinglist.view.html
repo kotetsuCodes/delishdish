@@ -1,0 +1,11 @@
+	<!-- List of Shopping Lists -->
+	<h3>Shopping Lists</h3>
+    <input type="text" ng-model="searchText" placeholder="Filter shopping lists...">
+
+	<div ng-repeat="shoppinglist in $ctrl.shoppinglists | filter:searchText">
+		<div class="link-item" ui-sref="base.shoppinglistdetail({id: shoppinglist.id})">{{shoppinglist.name}}</div>
+        <div class="link-item-action" ui-sref="base.shoppinglists.edit({id: shoppinglist.id})">e</div>
+        <div class="link-item-action" ng-click="$ctrl.removeShoppinglist($index)">x</div>
+    </div>
+
+    <button class="button color-darkturquoise" ui-sref="base.shoppinglists.add()">+</button>

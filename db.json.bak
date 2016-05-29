@@ -1,0 +1,47 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "carl@test.com"
+    }
+  ],
+  "recipes": [
+    {
+      "id": 1,
+      "name": "pizza",
+      "email": "carl@test.com",
+      "calorie_count": "1000",
+      "shared": true,
+      "ingredients": [
+        {
+          "name": "sliced cheese",
+          "quantity": "1/4",
+          "quantity_type": "tbs"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "pizza",
+      "email": "carl@test.com",
+      "shared": true,
+      "ingredients": [
+        {
+          "name": "sliced cheese",
+          "quantity": "1/4",
+          "quantity_type": "tbs"
+        }
+      ]
+    }
+  ],
+  "ingredients": [
+    "sliced cheese",
+    "shredded cheese"
+  ],
+  "quantity_types": [
+    "tb",
+    "tbs",
+    "tsp",
+    "pinch"
+  ]
+}
