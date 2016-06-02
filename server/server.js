@@ -131,7 +131,7 @@ router.route('/getUser')
 router.route('/recipe')
 
     .post(function (req, res) {
-        res.json([{ response: 'Recipe Created'}, {recipe: recipe}]);
+        res.json([{response: 'Recipe Created'}, {recipe: recipe}]);
     })
 
     // get all recipes for specific users
