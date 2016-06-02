@@ -25,7 +25,10 @@ mongoose.connect(settings.db); // connect to our database
 app.set('superSecret', settings.secret);
 
 // require in mongoose models
-var User = require('./app/models/user');
+//require in mongoose models
+var User = require('./models/user');
+var Recipe = require('./models/recipe');
+var ShoppingList = require('./models/shoppinglist');
 
 /*
 app.use(function(req, res, next) {
@@ -97,62 +100,103 @@ router.route('/authenticate')
         });
     });
 
-router.use(function (req, res, next) {
-    // check header or url parameters or post parameters for token
-    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+// router.use(function (req, res, next) {
+//     // check header or url parameters or post parameters for token
+//     var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
-  // decode token
-    if (token) {
-    // verifies secret and checks exp
-        jwt.verify(token, app.get('superSecret'), function (err, decoded) {
-            if (err) {
-                return res.json({ success: false, message: 'Failed to authenticate token.' });
-            } else {
-        // if everything is good, save to request for use in other routes
-                req.decoded = decoded;
-                next();
-            }
-        });
-    } else {
-    // if there is no token
-    // return an error
-        return res.status(403).send({
-            success: false,
-            message: 'No token provided.'
-        });
-    }
-});
+//   // decode token
+//     if (token) {
+//     // verifies secret and checks exp
+//         jwt.verify(token, app.get('superSecret'), function (err, decoded) {
+//             if (err) {
+//                 return res.json({ success: false, message: 'Failed to authenticate token.' });
+//             } else {
+//         // if everything is good, save to request for use in other routes
+//                 req.decoded = decoded;
+//                 next();
+//             }
+//         });
+//     } else {
+//     // if there is no token
+//     // return an error
+//         return res.status(403).send({
+//             success: false,
+//             message: 'No token provided.'
+//         });
+//     }
+// });
 
 router.route('/getUser')
     .post(function (req, res) {
         console.log('Retrieving authenticated user');
     });
 
-router.route('/recipe')
-
-    .post(function (req, res) {
-        res.json([{response: 'Recipe Created'}, {recipe: recipe}]);
-    })
-
-    // get all recipes for specific users
+router.route('/shoppinglists')
     .get(function (req, res) {
-        User.findOne({email: req.body.email}, function (err, users) {
-            res.json(users);
+        ShoppingList.find({email: 'test@test.com'}, function (err, shoppinglists) {
+            if (err) {
+                return res.status(500).send({
+                    success: false,
+                    message: 'Unexpected error occurred.'
+                });
+            }
+
+            res.json(shoppinglists);
+        });
+    })
+    .post(function (req, res) {
+        var shoppinglist = new ShoppingList();
+
+        shoppinglist.email = 'test@test.com';
+        shoppinglist.name = req.body.name;
+        shoppinglist.recipes = req.body.recipes;
+
+        shoppinglist.save(function (err, shoppinglist) {
+            if (err) {
+                return res.status(500).send({
+                    success: false,
+                    message: 'Unexpected error occurred.'
+                });
+            }
+
+            res.json({success: true});
         });
     });
 
-router.route('/recipe/:_id')
+router.route('/shoppinglists/:_id')
     .get(function (req, res) {
-        // get single recipe for specific user
-    })
 
+    })
     .put(function (req, res) {
-        // update a single recipe
 
     })
-
     .delete(function (req, res) {
-        // remove a single recipe
+
+    });
+
+router.route('/recipe')
+    // get all recipes for specific users
+    .get(function (req, res) {
+            
+    })
+    // add a recipe
+    .post(function (req, res) {
+        
+    });
+
+
+router.route('/recipe/:_id')
+    // get single recipe for specific user
+    .get(function (req, res) {
+
+    })
+    // update a single recipe
+    .put(function (req, res) {
+
+    })
+    // remove a single recipe
+    .delete(function (req, res) {
+
     });
 
 app.use('/api', router);
