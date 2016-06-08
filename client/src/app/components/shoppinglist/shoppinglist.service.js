@@ -2,12 +2,12 @@ export default class ShoppinglistService {
     constructor ($resource) {
         'ngInject';
 
-        return $resource(BACKEND_URL + '/shoppinglists?email=:email', {}, {
-            'getShoppinglistsByEmail': {
+        return $resource(BACKEND_URL + '/shoppinglists', {}, {
+            'getShoppinglists': {
                 method: 'GET',
                 isArray: true
             },
-            'getShoppinglistById': {
+            'getShoppinglist': {
                 url: BACKEND_URL + '/shoppinglists/:id',
                 method: 'GET'
             },

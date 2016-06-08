@@ -3,16 +3,12 @@ export default class recipeService {
         'ngInject';
 
         return $resource(BACKEND_URL + '/recipes/:id', {}, {
-            'getRecipeById': {
+            'getRecipe': {
                 method: 'GET'
             },
             'getRecipes': {
                 url: BACKEND_URL + '/recipes',
                 method: 'GET',
-                isArray: true
-            },
-            'getRecipesByEmail': {
-                url: BACKEND_URL + '/recipes?email=:email',
                 isArray: true
             },
             'createRecipe': {
@@ -33,7 +29,7 @@ export default class recipeService {
                 isArray: true
             },
             'getQuantityTypeSuggestions': {
-                url: BACKEND_URL + '/quantity_types',
+                url: BACKEND_URL + '/quantityTypes',
                 method: 'GET',
                 isArray: true
             },
@@ -42,7 +38,7 @@ export default class recipeService {
                 method: 'POST'
             },
             'addQuantityType': {
-                url: BACKEND_URL + '/quantity_types',
+                url: BACKEND_URL + '/quantityTypes',
                 method: 'POST'
             }
         });

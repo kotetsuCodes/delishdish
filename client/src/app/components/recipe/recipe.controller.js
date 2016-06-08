@@ -3,7 +3,7 @@ export default class RecipeController {
         'ngInject';
 
         this.recipeService = recipeService;
-        this.recipes = recipeService.getRecipesByEmail({email: 'carl@test.com'});
+        this.recipes = recipeService.getRecipes();
         this.ingredientSuggestions = recipeService.getIngredientSuggestions();
         this.quantityTypeSuggestions = recipeService.getQuantityTypeSuggestions();
         this.showIngredientSuggestions = false;
@@ -16,7 +16,7 @@ export default class RecipeController {
         this.recipe = {};
 
         if ($stateParams.id) {
-            this.recipeService.getRecipeById({id: this.$stateParams.id}).$promise.then(response => {
+            this.recipeService.getRecipe({id: this.$stateParams.id}).$promise.then(response => {
                 this.recipe = response;
             });
         }
@@ -85,12 +85,12 @@ export default class RecipeController {
     }
 
     removeRecipe (index) {
-        this.recipeService.removeRecipe({id: this.recipes[index].id});
+        this.recipeService.removeRecipe({id: this.recipes[index]._id});
         this.recipes.splice(index, 1);
     }
 
     updateRecipe () {
-        this.recipeService.updateRecipe({id: this.recipe.id}, this.recipe);
+        this.recipeService.updateRecipe({id: this.recipe._id}, this.recipe);
     }
 
     toggleIngredientSuggestions (show) {
