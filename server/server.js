@@ -53,7 +53,6 @@ router.route('/createAccount')
         var user = new User();
         user.email = req.body.email;
         user.password = req.body.password;
-        user.recipes = [];
 
         user.save(function (err, user) {
             if (err) throw err;
@@ -63,7 +62,7 @@ router.route('/createAccount')
         });
     });
 
-router.route('/authenticate')
+router.route('/login')
     .post(function (req, res) {
         console.log('attempting to authenticate');
 
