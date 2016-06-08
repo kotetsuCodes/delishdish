@@ -3,16 +3,12 @@ export default class ShoppinglistDetailService {
         'ngInject';
 
         return $resource(BACKEND_URL + '/shoppinglists/:id', {}, {
-            'getShoppinglistById': {
+            'getShoppinglist': {
                 method: 'GET'
             },
-            'getRecipeById': {
+            'getRecipe': {
                 url: BACKEND_URL + '/recipes/:id',
                 method: 'GET'
-            },
-            'getRecipeByName': {
-                url: BACKEND_URL + '/recipes?name=:name',
-                isArray: true
             }
         });
     }

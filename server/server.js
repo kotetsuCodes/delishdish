@@ -25,10 +25,12 @@ mongoose.connect(settings.db); // connect to our database
 app.set('superSecret', settings.secret);
 
 // require in mongoose models
-//require in mongoose models
+// require in mongoose models
 var User = require('./models/user');
 var Recipe = require('./models/recipe');
 var ShoppingList = require('./models/shoppinglist');
+var Ingredient = require('./models/ingredient');
+var QuantityType = require('./models/quantity_type');
 
 /*
 app.use(function(req, res, next) {
@@ -163,40 +165,187 @@ router.route('/shoppinglists')
         });
     });
 
-router.route('/shoppinglists/:_id')
+router.route('/shoppinglists/:id')
     .get(function (req, res) {
+        ShoppingList.findOne({email: 'test@test.com', _id: req.params.id}, function (err, shoppinglistResult) {
+            if (err) {
+                return res.status(500).send({
+                    success: false,
+                    message: 'Unexpected error occurred.'
+                });
+            }
+            if (shoppinglistResult == null) {
+                return res.status(404).send({
+                    success: false,
+                    message: 'Shopping List Not Found'
+                });
+            }
 
+            res.json(shoppinglistResult);
+        });
     })
     .put(function (req, res) {
+        ShoppingList.findOneAndUpdate({email: 'test@test.com', _id: req.params.id}, req.body, function (err, originalShoppingList) {
+            if (err) {
+                return res.status(500).send({
+                    success: false,
+                    message: 'Unexpected error occurred.'
+                });
+            }
 
+            res.json(originalShoppingList);
+        });
     })
     .delete(function (req, res) {
+        ShoppingList.findOneAndRemove({email: 'test@test.com', _id: req.params.id}, function (err, originalShoppingList) {
+            if (err) {
+                return res.status(500).send({
+                    success: false,
+                    message: 'Unexpected error occurred.'
+                });
+            }
 
+            res.json(originalShoppingList);
+        });
     });
 
-router.route('/recipe')
+router.route('/recipes')
     // get all recipes for specific users
     .get(function (req, res) {
-            
+        Recipe.find({email: 'test@test.com'}, function (err, recipes) {
+            if (err) {
+                return res.status(500).send({
+                    success: false,
+                    message: 'Unexpected error occurred.'
+                });
+            }
+
+            res.json(recipes);
+        });
     })
     // add a recipe
     .post(function (req, res) {
-        
+        var newRecipe = new Recipe();
+
+        newRecipe.email = 'test@test.com';
+        newRecipe.name = req.body.name;
+        newRecipe.ingredients = req.body.ingredients;
+
+        newRecipe.save(function (err, newRecipe) {
+            if (err) {
+                return res.status(500).send({
+                    success: false,
+                    message: 'Unexpected error occurred.'
+                });
+            }
+
+            res.json({success: true});
+        });
     });
 
-
-router.route('/recipe/:_id')
+router.route('/recipes/:id')
     // get single recipe for specific user
     .get(function (req, res) {
+        Recipe.findOne({email: 'test@test.com', _id: req.params.id}, function (err, recipeResult) {
+            if (err) {
+                return res.status(500).send({
+                    success: false,
+                    message: 'Unexpected error occurred.'
+                });
+            }
+            if (recipeResult == null) {
+                return res.status(404).send({
+                    success: false,
+                    message: 'Recipe Not Found'
+                });
+            }
 
+            res.json(recipeResult);
+        });
     })
     // update a single recipe
     .put(function (req, res) {
+        Recipe.findOneAndUpdate({email: 'test@test.com', _id: req.params.id}, req.body, function (err, originalRecipe) {
+            if (err) {
+                return res.status(500).send({
+                    success: false,
+                    message: 'Unexpected error occurred.'
+                });
+            }
 
+            res.json(originalRecipe);
+        });
     })
     // remove a single recipe
     .delete(function (req, res) {
+        Recipe.findOneAndRemove({email: 'test@test.com', _id: req.params.id}, function (err, originalRecipe) {
+            if (err) {
+                return res.status(500).send({
+                    success: false,
+                    message: 'Unexpected error occurred.'
+                });
+            }
 
+            res.json(originalRecipe);
+        });
+    });
+
+router.route('/ingredients')
+    .get(function (req, res) {
+        Ingredient.find({}, function (err, ingredientResult) {
+            if (err) {
+                return res.status(500).send({
+                    success: false,
+                    message: 'Unexpected error occurred.'
+                });
+            }
+            res.json(ingredientResult);
+        });
+    })
+    .post(function (req, res) {
+        var newIngredient = new Ingredient();
+
+        newIngredient.name = req.body.name;
+
+        newIngredient.save(function (err, newIngredient) {
+            if (err) {
+                return res.status(500).send({
+                    success: false,
+                    message: 'Unexpected error occurred.'
+                });
+            }
+
+            res.json({success: true});
+        });
+    });
+
+router.route('/quantityTypes')
+    .get(function (req, res) {
+        QuantityType.find({}, function (err, quantityTypeResult) {
+            if (err) {
+                return res.status(500).send({
+                    success: false,
+                    message: 'Unexpected error occurred.'
+                });
+            }
+            res.json(quantityTypeResult);
+        });
+    })
+    .post(function (req, res) {
+        var newQuantityType = new QuantityType();
+
+        newQuantityType.name = req.body.name;
+
+        newQuantityType.save(function (err, newQuantityType) {
+            if (err) {
+                return res.status(500).send({
+                    success: false,
+                    message: 'Unexpected error occurred.'
+                });
+            }
+
+            res.json({success: true});
+        });
     });
 
 app.use('/api', router);

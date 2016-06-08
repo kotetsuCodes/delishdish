@@ -5,8 +5,8 @@ export default class ShoppinglistController {
         this.shoppinglistService = ShoppinglistService;
         this.recipeService = RecipeService;
         this.userEmail = 'carl@test.com';
-        this.shoppinglists = this.shoppinglistService.getShoppinglistsByEmail({email: this.userEmail});
-        this.recipes = this.recipeService.getRecipesByEmail({email: this.userEmail});
+        this.shoppinglists = this.shoppinglistService.getShoppinglists();
+        this.recipes = this.recipeService.getRecipes();
         // clear out form bindings
         this.newShoppinglist = {};
         this.newShoppinglist.recipes = [];
@@ -15,7 +15,7 @@ export default class ShoppinglistController {
         this.shoppinglist = {};
 
         if ($stateParams.id) {
-            this.shoppinglistService.getShoppinglistById({id: this.$stateParams.id}).$promise.then(response => {
+            this.shoppinglistService.getShoppinglist({id: this.$stateParams.id}).$promise.then(response => {
                 this.shoppinglist = response;
             });
         }
@@ -34,18 +34,18 @@ export default class ShoppinglistController {
     }
 
     removeShoppinglist (index) {
-        this.shoppinglistService.removeShoppinglist({id: this.shoppinglists[index].id})
+        this.shoppinglistService.removeShoppinglist({id: this.shoppinglists[index]._id})
         .$promise.then(response => {
             this.shoppinglists.splice(index, 1);
         });
     }
 
     updateShoppinglist () {
-        this.shoppinglistService.updateShoppinglist({id: this.shoppinglist.id}, this.shoppinglist);
+        this.shoppinglistService.updateShoppinglist({id: this.shoppinglist._id}, this.shoppinglist);
     }
 
     addRecipeToShoppinglist (shoppinglist, recipe) {
-        shoppinglist.recipes.push(recipe.name);
+        shoppinglist.recipes.push(recipe._id);
     }
 
     removeRecipeFromShoppinglist (shoppinglist, index) {
