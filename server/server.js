@@ -75,16 +75,16 @@ router.route('/login')
             }
 
             if (!user) {
-                res.json({ success: false, message: 'Authentication failed. Email or Password not correct.' });
+                res.status(401).send({ success: false, message: 'Authentication failed. Email or Password not correct.' });
             } else if (user) {
               // check if password matches
                 if (user.password !== req.body.password) {
-                    res.json({ success: false, message: 'Authentication failed. Email or Password not correct.' });
+                    res.status(401).send({ success: false, message: 'Authentication failed. Email or Password not correct.' });
                 } else {
                     // if user is found and password is right
                     // create a token
                     var token = jwt.sign({_id: user._id, email: user.email}, app.get('superSecret'), {
-                        expiresInMinutes: 1440 // expires in 24 hours
+                        expiresIn: 86400 // expires in 24 hours
                     });
 
                     // return the information including token as JSON
@@ -101,40 +101,39 @@ router.route('/login')
         });
     });
 
-// router.use(function (req, res, next) {
-//     // check header or url parameters or post parameters for token
-//     var token = req.body.token || req.query.token || req.headers['x-access-token'];
+//runs on every request
+router.use(function(req, res, next) {
 
-//   // decode token
-//     if (token) {
-//     // verifies secret and checks exp
-//         jwt.verify(token, app.get('superSecret'), function (err, decoded) {
-//             if (err) {
-//                 return res.json({ success: false, message: 'Failed to authenticate token.' });
-//             } else {
-//         // if everything is good, save to request for use in other routes
-//                 req.decoded = decoded;
-//                 next();
-//             }
-//         });
-//     } else {
-//     // if there is no token
-//     // return an error
-//         return res.status(403).send({
-//             success: false,
-//             message: 'No token provided.'
-//         });
-//     }
-// });
+    // check header or url parameters or post parameters for token
+    var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers['authorization'];
 
-router.route('/getUser')
-    .post(function (req, res) {
-        console.log('Retrieving authenticated user');
+    // decode token
+    if (token) {
+    // verifies secret and checks exp
+    jwt.verify(token, app.get('superSecret'), function(err, decoded) {
+        if (err) {
+            res.status(401).send({ success: false, message: 'Failed to authenticate token.' });
+        } else {
+            // if everything is good, save to request for use in other routes
+            req.decoded = decoded;
+            next();
+        }
     });
+  } else {
+
+    // if there is no token
+    // return an error
+    return res.status(401).send({
+        success: false,
+        message: 'No token provided.'
+    });
+
+    }
+});
 
 router.route('/shoppinglists')
     .get(function (req, res) {
-        ShoppingList.find({email: 'test@test.com'}, function (err, shoppinglists) {
+        ShoppingList.find({email: req.decoded.email}, function (err, shoppinglists) {
             if (err) {
                 return res.status(500).send({
                     success: false,
@@ -148,7 +147,7 @@ router.route('/shoppinglists')
     .post(function (req, res) {
         var shoppinglist = new ShoppingList();
 
-        shoppinglist.email = 'test@test.com';
+        shoppinglist.email = req.decoded.email;
         shoppinglist.name = req.body.name;
         shoppinglist.recipes = req.body.recipes;
 
@@ -166,7 +165,7 @@ router.route('/shoppinglists')
 
 router.route('/shoppinglists/:id')
     .get(function (req, res) {
-        ShoppingList.findOne({email: 'test@test.com', _id: req.params.id}, function (err, shoppinglistResult) {
+        ShoppingList.findOne({email: req.decoded.email, _id: req.params.id}, function (err, shoppinglistResult) {
             if (err) {
                 return res.status(500).send({
                     success: false,
@@ -184,7 +183,7 @@ router.route('/shoppinglists/:id')
         });
     })
     .put(function (req, res) {
-        ShoppingList.findOneAndUpdate({email: 'test@test.com', _id: req.params.id}, req.body, function (err, originalShoppingList) {
+        ShoppingList.findOneAndUpdate({email: req.decoded.email, _id: req.params.id}, req.body, function (err, originalShoppingList) {
             if (err) {
                 return res.status(500).send({
                     success: false,
@@ -196,7 +195,7 @@ router.route('/shoppinglists/:id')
         });
     })
     .delete(function (req, res) {
-        ShoppingList.findOneAndRemove({email: 'test@test.com', _id: req.params.id}, function (err, originalShoppingList) {
+        ShoppingList.findOneAndRemove({email: req.decoded.email, _id: req.params.id}, function (err, originalShoppingList) {
             if (err) {
                 return res.status(500).send({
                     success: false,
@@ -211,7 +210,7 @@ router.route('/shoppinglists/:id')
 router.route('/recipes')
     // get all recipes for specific users
     .get(function (req, res) {
-        Recipe.find({email: 'test@test.com'}, function (err, recipes) {
+        Recipe.find({email: req.decoded.email}, function (err, recipes) {
             if (err) {
                 return res.status(500).send({
                     success: false,
@@ -226,7 +225,7 @@ router.route('/recipes')
     .post(function (req, res) {
         var newRecipe = new Recipe();
 
-        newRecipe.email = 'test@test.com';
+        newRecipe.email = req.decoded.email;
         newRecipe.name = req.body.name;
         newRecipe.ingredients = req.body.ingredients;
 
@@ -245,7 +244,7 @@ router.route('/recipes')
 router.route('/recipes/:id')
     // get single recipe for specific user
     .get(function (req, res) {
-        Recipe.findOne({email: 'test@test.com', _id: req.params.id}, function (err, recipeResult) {
+        Recipe.findOne({email: req.decoded.email, _id: req.params.id}, function (err, recipeResult) {
             if (err) {
                 return res.status(500).send({
                     success: false,
@@ -264,7 +263,7 @@ router.route('/recipes/:id')
     })
     // update a single recipe
     .put(function (req, res) {
-        Recipe.findOneAndUpdate({email: 'test@test.com', _id: req.params.id}, req.body, function (err, originalRecipe) {
+        Recipe.findOneAndUpdate({email: req.decoded.email, _id: req.params.id}, req.body, function (err, originalRecipe) {
             if (err) {
                 return res.status(500).send({
                     success: false,
@@ -277,7 +276,7 @@ router.route('/recipes/:id')
     })
     // remove a single recipe
     .delete(function (req, res) {
-        Recipe.findOneAndRemove({email: 'test@test.com', _id: req.params.id}, function (err, originalRecipe) {
+        Recipe.findOneAndRemove({email: req.decoded.email, _id: req.params.id}, function (err, originalRecipe) {
             if (err) {
                 return res.status(500).send({
                     success: false,
