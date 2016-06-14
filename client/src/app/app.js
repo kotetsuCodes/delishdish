@@ -1,4 +1,4 @@
-import '../style/app.scss';
+import '../../../../sass-example/public/stylesheets/main.css';
 import angular from 'angular';
 import uirouter from 'angular-ui-router';
 import routing from './app.config';
