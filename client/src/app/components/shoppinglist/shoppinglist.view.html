@@ -1,36 +1,18 @@
 	<!-- List of Shopping Lists -->
 	<div class="row">
-        <div class="col-12-mobile col-12-desktop">
+        <div class="col-12-mobile col-12-desktop center-text">
             <h3>Shopping Lists</h3>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-12-mobile col-12-desktop">
-            <input type="text" ng-model="searchText" placeholder="Filter shopping lists...">
-        </div>
+<div class="row">
+    <div class="col-12-mobile col-12-desktop">
+        <accordian shoppinglists="$ctrl.shoppinglists"></accordian>
     </div>
-
-    <div class="row">
-        <div class="collection">
-            <div class="collection-item" ng-repeat="shoppinglist in $ctrl.shoppinglists | filter:searchText">
-
-                <div class="collection-item-8">
-                    <a ui-sref="base.shoppinglistdetail({id: shoppinglist._id})">{{shoppinglist.name}}</a>
-                </div>
-
-                <div class="collection-item-2 center-text">
-                    <a ui-sref="base.shoppinglists.edit({id: shoppinglist._id})"><i class="fa fa-pencil"></i></a>
-                </div>
-
-                <div class="collection-item-2 center-text">
-                    <a ng-click="$ctrl.removeShoppinglist($index)"><i class="fa fa-trash"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
 </div>
 
-<button class="btn-primary" ui-sref="base.shoppinglists.add()"><i class="fa fa-plus"></i></button>
+<div class="row">
+    <div class="col-12-mobile col-12-desktop">
+        <button class="btn-primary" ui-sref="base.shoppinglists.add"><i class="fa fa-plus"></i>&nbsp;Shopping List</button>
+    </div>
+</div>

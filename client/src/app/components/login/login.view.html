@@ -1,4 +1,9 @@
 <div class="row">
+
+    <div class="col-12-mobile center-text">
+        <h3>DELISH DISH</h3>    
+    </div>
+
     <form>
         <div class="col-12-mobile col-12-desktop">
             <input type="text" ng-model="$ctrl.email" placeholder="Email Address"/>
@@ -8,8 +13,27 @@
             <input type="password" ng-model="$ctrl.password" placeholder="Password" />
         </div>
 
+        <div class="col-2-mobile col-2-desktop">
+            <div ng-show="$ctrl.showBadLoginNotification" class="error">
+                <i class="fa fa-exclamation-triangle fa-lg" aria-hidden="true"></i>
+            </div>
+        </div>
+
+        <div class="col-10-mobile col-10-desktop">
+            <div ng-show="$ctrl.showBadLoginNotification" class="error">
+                {{$ctrl.BadLoginMessage}}
+            </div>
+        </div>
+
+        <div class="col-10-mobile col-10-desktop">
+            <div ng-show="$ctrl.showUnknownErrorNotification" class="error">
+                {{$ctrl.showUnknownErrorMessage}}
+            </div>
+        </div>
+
         <div class="col-12-mobile col-12-desktop">
             <button class="btn-primary" ng-click="$ctrl.login()">Sign In</button>
         </div>
+
     </form>
 </div>

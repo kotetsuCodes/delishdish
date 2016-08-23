@@ -14,9 +14,9 @@ export default function routes ($stateProvider) {
             },
             'nav@': {
                 templateUrl: navTemplateUrl,
-                controller: function () {
-
-                }
+                controller: 'NavController',
+                controllerAs: '$ctrl',
+                bindToController: true
             }
         }
     });

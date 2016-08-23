@@ -1,9 +1,51 @@
-<h3>Recipes</h3>
-
-<div ng-repeat="recipe in $ctrl.recipes">
-	<div class="link-item" ui-sref="base.recipes.editrecipe({id: recipe._id})">{{recipe.name}}</div>
-    <div class="link-item-action" ng-click="$ctrl.removeRecipe($index)">x</div>
+<!-- <div class="row">
+    <div class="col-12-mobile col-12-desktop center-text">
+        <h3>Recipes</h3>
+    </div>
 </div>
 
-<button class="button color-pink" ui-sref="base.recipes.addrecipe()">+</button>
+<div class="row">
+    <div class="col-12-mobile col-12-desktop">
+        <div class="collection">
+            <div class="collection-item" ng-repeat="recipe in $ctrl.recipes">
 
+                <div class="collection-item-8">
+                    <a ui-sref="base.recipes.editrecipe({id: recipe._id})">{{recipe.name}}</a>
+                </div>
+
+                <div class="collection-item-2 center-text">
+                    <a ui-sref="base.recipes.editrecipe({id: recipe._id})"><i class="fa fa-pencil"></i></a>
+                </div>
+
+                <div class="collection-item-2 center-text">
+                    <a ng-click="$ctrl.removeRecipe($index)"><i class="fa fa-trash"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<button class="btn-primary" ui-sref="base.recipes.addrecipe()"><i class="fa fa-plus"></i></button>
+
+ -->
+
+
+    <!-- List of Shopping Lists -->
+    <div class="row">
+        <div class="col-12-mobile col-12-desktop center-text">
+            <h3>Recipes</h3>
+        </div>
+    </div>
+
+<div class="row">
+    <div class="col-12-mobile col-12-desktop">
+        <recipeAccordian recipes="$ctrl.recipes"></recipeAccordian>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12-mobile col-12-desktop">
+        <button class="btn-primary" ui-sref="base.recipes.add"><i class="fa fa-plus"></i>&nbsp;Recipe</button>
+    </div>
+</div>

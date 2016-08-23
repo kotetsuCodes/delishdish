@@ -1,4 +1,4 @@
-<h3>Add New Recipe</h3>
+<!-- <h3>Add New Recipe</h3>
 
 <input type="text" class="input" ng-model="$ctrl.newRecipe.name" placeholder="Recipe Title" />
 <input type="text" class="input" ng-model="$ctrl.newRecipe.calorie_count" placeholder="Calorie Count" />
@@ -27,6 +27,93 @@
 </div>
 
 <button class="button color-pink" ng-click="$ctrl.addRecipe()">Done!</button>
+-->
 
+
+<div class="row">
+    <div class="col-12-mobile col-12-desktop center-text">
+        <h3>Add Recipe</h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12-mobile col-12-desktop">
+        <input type="text" ng-model="$ctrl.newRecipe.name" placeholder="Recipe Name">
+        <!-- <input type="text" value="{{$ctrl.newRecipe.ingredients.length}}"> -->
+    </div>
+</div>
+
+<!-- quantity selection -->
+<div class="row">
+    <div class="col-2-mobile col-4-desktop">
+        <input type="text" ng-model="$ctrl.currentIngredient.quantity">
+    </div>
+    <div class="col-8-mobile col-6-desktop">
+        <input type="text" ng-model="$ctrl.currentIngredient.quantity_type">
+    </div>
+    <div class="col-2-mobile col-2-desktop">
+        <select ng-model="quantitySelect" ng-change="$ctrl.setQuantityType(quantitySelect)">
+            <option ng-repeat="quantityType in $ctrl.quantityTypeSuggestions">{{quantityType.name}}</option>
+        </select>
+    </div>
+</div>
+
+<!--  List of ingredients -->
+<div class="row">
+    <div class="col-10-mobile col-10-desktop">
+        <input type="text" ng-model="$ctrl.currentIngredient.name">
+    </div>
+
+    <div class="col-2-mobile col-2-desktop">
+        <select ng-model="ingredientSelect" ng-change="$ctrl.setIngredientName(ingredientSelect)">
+            <option ng-repeat="ingredient in $ctrl.ingredientSuggestions">{{ingredient.name}}</option>
+        </select>
+    </div>
+
+    <!-- <div class="collection" ng-repeat="ingredient in $ctrl.ingredientSuggestions" ng-click="$ctrl.addIngredient(ingredient)"> -->
+    <!-- <div class="collection" ng-repeat="ingredient in $ctrl.ingredientSuggestions" ng-show="$ctrl.currentIngredient.name === '' || $ctrl.currentIngredient.name === ingredient.name"> -->
+            <!-- <div class="collection-item-10 bgcolor-default color-default align-vertical">
+                <div>
+                    {{ingredient.name}}
+                </div>
+            </div>
+            <div class="collection-item-2 bgcolor-default color-primary align-vertical align-horizontal">
+                <i class="fa fa-plus"></i>
+            </div>
+        </div> -->
+    </div>
+
+    <div class="row">
+        <div class="col-12-mobile col-12-desktop">
+            <button class="bgcolor-primary" ng-click="$ctrl.addIngredient(ingredient)">Add Ingredient</button>
+        </div>
+    </div>
+
+    <div class="row">
+    <div class="col-12-mobile col-12-desktop align-horizontal center-text">
+    <hr class="color-primary">
+        <h3>Added Ingredients</h3>
+    </div>
+    </div>
+
+    <div class="row" ng-repeat="ingredient in $ctrl.newRecipe.ingredients track by $index">
+        <div class="collection">
+            <div class="collection-item-10 align-vertical">
+                {{ingredient.name}}
+            </div>
+            <div class="collection-item-2 align-vertical align-horizontal" ng-click="$ctrl.removeIngredient($ctrl.newRecipe, $index)">
+                <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6-mobile col-6-desktop">
+            <button class="bgcolor-primary" ng-click="$ctrl.saveRecipe()">Save</button>
+        </div>
+        <div class="col-6-mobile col-6-desktop">
+            <button class="bgcolor-default" ui-sref="base.recipes">Cancel</button>
+        </div>
+    </div>
 
 

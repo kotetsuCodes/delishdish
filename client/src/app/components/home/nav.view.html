@@ -1,7 +1,19 @@
-<div>
-    <div>
-        <a class="link-nav color-darkturquoise" ui-sref="base.shoppinglists">Lists</a>
-        <a class="link-nav color-pink" ui-sref="base.recipes">Recipes</a>
-        <a class="link-nav color-orange">Profile</a>
+<div class="navbar">
+    <div ng-class="{ navactive: $ctrl.isActive('/shoppinglists') }" class="nav-active nav-4-mobile nav-4-desktop" ui-sref="base.shoppinglists">
+        <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+        <br>
+        <a >Lists</a>
+    </div>
+
+    <div ng-class="{ navactive: $ctrl.isActive('/recipes') }" class="nav-4-mobile nav-4-desktop" ui-sref="base.recipes">
+        <i class="fa fa-cutlery" aria-hidden="true"></i>
+        <br>
+        <a>Recipes</a>
+    </div>
+
+    <div class="nav-4-mobile nav-4-desktop">
+        <i class="fa fa-user" aria-hidden="true"></i>
+        <br>
+        <a>Profile</a>
     </div>
 </div>

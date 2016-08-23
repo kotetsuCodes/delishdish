@@ -20,6 +20,7 @@ app.use(morgan('dev'));
 var port = process.env.PORT || 9090; // set our port
 
 var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 mongoose.connect(settings.db); // connect to our database
 
 app.set('superSecret', settings.secret);
@@ -49,22 +50,22 @@ var router = express.Router();
 
 router.route('/createAccount')
 
-    .post(function (req, res) {
-        var user = new User();
-        user.email = req.body.email;
-        user.password = req.body.password;
+.post(function (req, res) {
+    var user = new User();
+    user.email = req.body.email;
+    user.password = req.body.password;
 
-        user.save(function (err, user) {
-            if (err) throw err;
+    user.save(function (err, user) {
+        if (err) throw err;
 
-            console.log('User Created Successfully');
-            res.json({success: true});
-        });
+        console.log('User Created Successfully');
+        res.json({success: true});
     });
+});
 
 router.route('/login')
-    .post(function (req, res) {
-        console.log('attempting to authenticate');
+.post(function (req, res) {
+    console.log('attempting to authenticate');
 
         // find the user
         User.findOne({
@@ -78,9 +79,9 @@ router.route('/login')
                 res.status(401).send({ success: false, message: 'Authentication failed. Email or Password not correct.' });
             } else if (user) {
               // check if password matches
-                if (user.password !== req.body.password) {
-                    res.status(401).send({ success: false, message: 'Authentication failed. Email or Password not correct.' });
-                } else {
+              if (user.password !== req.body.password) {
+                res.status(401).send({ success: false, message: 'Authentication failed. Email or Password not correct.' });
+            } else {
                     // if user is found and password is right
                     // create a token
                     var token = jwt.sign({_id: user._id, email: user.email}, app.get('superSecret'), {
@@ -119,7 +120,7 @@ router.use(function(req, res, next) {
             next();
         }
     });
-  } else {
+} else {
 
     // if there is no token
     // return an error
@@ -128,84 +129,118 @@ router.use(function(req, res, next) {
         message: 'No token provided.'
     });
 
-    }
+}
 });
 
 router.route('/shoppinglists')
-    .get(function (req, res) {
-        ShoppingList.find({email: req.decoded.email}, function (err, shoppinglists) {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: 'Unexpected error occurred.'
-                });
-            }
+.get(function (req, res) {
 
-            res.json(shoppinglists);
-        });
-    })
-    .post(function (req, res) {
-        var shoppinglist = new ShoppingList();
-
-        shoppinglist.email = req.decoded.email;
-        shoppinglist.name = req.body.name;
-        shoppinglist.recipes = req.body.recipes;
-
-        shoppinglist.save(function (err, shoppinglist) {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: 'Unexpected error occurred.'
-                });
-            }
-
-            res.json({success: true});
-        });
+    ShoppingList.find({email: req.decoded.email}).populate('recipeIds').exec(function(err, shoppinglists) {
+    // list of cars with partIds populated
+    console.log(shoppinglists);
+    res.json(shoppinglists);
     });
+
+
+    // let shoppingListPromise = ShoppingList.find({email: req.decoded.email}).exec();
+    // shoppingListPromise.then(function(err, shoppinglist) {
+    //     let recipePromise = Recipe.find({'_id': { $in: shoppinglist.recipes}}).exec();
+    //         recipePromise.then(function(recipe) {
+    //             console.log(`recipe: ${recipe}`);
+    //             shoppinglist.recipes = recipe;
+    //             console.log(shoppinglist.recipes);
+    //         });
+    // });
+
+    // ShoppingList.find({email: req.decoded.email}, function (err, shoppinglists) {
+    //     if (err) {
+    //         return res.status(500).send({
+    //             success: false,
+    //             message: 'Unexpected error occurred.'
+    //         });
+    //     }
+
+    //     let shoppinglistCollection = [];
+
+    //     for(var i = 0; i < shoppinglists.length; i++) {
+    //         console.log(`i: ${i}`);
+    //         shoppinglistCollection.push({_id: shoppinglists[i]._id, email: shoppinglists[i].email, name: shoppinglists[i].name, recipes: []});
+
+    //         let recipePromise = Recipe.find({'_id': { $in: shoppinglists[i].recipes}}).exec();
+    //         recipePromise.then(function(recipe) {
+    //             console.log(`recipe: ${recipe}`);
+    //             shoppinglistCollection[i].recipes.push(recipe);
+    //         });
+    //     }
+    //     console.log(`shoppinglistCollection: ${shoppinglistCollection.recipes}`);
+    //     //console.log(shoppinglists[0].recipes);
+    //     res.json(shoppinglistCollection);
+    // });
+})
+.post(function (req, res) {
+    var shoppinglist = new ShoppingList();
+
+    shoppinglist.email = req.decoded.email;
+    shoppinglist.name = req.body.name;
+    shoppinglist.recipeIds = req.body.recipeIds;
+
+    shoppinglist.save(function (err, shoppinglist) {
+        if (err) {
+            console.log(err);
+            return res.status(500).send({
+                success: false,
+                message: 'Unexpected error occurred.'
+            });
+        }
+
+        res.json({success: true});
+    });
+});
 
 router.route('/shoppinglists/:id')
-    .get(function (req, res) {
-        ShoppingList.findOne({email: req.decoded.email, _id: req.params.id}, function (err, shoppinglistResult) {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: 'Unexpected error occurred.'
-                });
-            }
-            if (shoppinglistResult == null) {
-                return res.status(404).send({
-                    success: false,
-                    message: 'Shopping List Not Found'
-                });
-            }
+.get(function (req, res) {
+    ShoppingList.findOne({email: req.decoded.email, _id: req.params.id}).populate('recipeIds').exec(function (err, shoppinglist) {
+        if (err) {
+            return res.status(500).send({
+                success: false,
+                message: 'Unexpected error occurred.'
+            });
+        }
+        if (shoppinglist == null) {
+            return res.status(404).send({
+                success: false,
+                message: 'Shopping List Not Found'
+            });
+        }
 
-            res.json(shoppinglistResult);
-        });
-    })
-    .put(function (req, res) {
-        ShoppingList.findOneAndUpdate({email: req.decoded.email, _id: req.params.id}, req.body, function (err, originalShoppingList) {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: 'Unexpected error occurred.'
-                });
-            }
-
-            res.json(originalShoppingList);
-        });
-    })
-    .delete(function (req, res) {
-        ShoppingList.findOneAndRemove({email: req.decoded.email, _id: req.params.id}, function (err, originalShoppingList) {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: 'Unexpected error occurred.'
-                });
-            }
-
-            res.json(originalShoppingList);
-        });
+        res.json(shoppinglist);
     });
+})
+.put(function (req, res) {
+    ShoppingList.findOneAndUpdate({email: req.decoded.email, _id: req.params.id}, req.body, function (err, originalShoppingList) {
+        console.log(err);
+        if (err) {
+            return res.status(500).send({
+                success: false,
+                message: 'Unexpected error occurred.'
+            });
+        }
+
+        res.json(originalShoppingList);
+    });
+})
+.delete(function (req, res) {
+    ShoppingList.findOneAndRemove({email: req.decoded.email, _id: req.params.id}, function (err, originalShoppingList) {
+        if (err) {
+            return res.status(500).send({
+                success: false,
+                message: 'Unexpected error occurred.'
+            });
+        }
+
+        res.json(originalShoppingList);
+    });
+});
 
 router.route('/recipes')
     // get all recipes for specific users
@@ -241,7 +276,7 @@ router.route('/recipes')
         });
     });
 
-router.route('/recipes/:id')
+    router.route('/recipes/:id')
     // get single recipe for specific user
     .get(function (req, res) {
         Recipe.findOne({email: req.decoded.email, _id: req.params.id}, function (err, recipeResult) {
@@ -288,7 +323,7 @@ router.route('/recipes/:id')
         });
     });
 
-router.route('/ingredients')
+    router.route('/ingredients')
     .get(function (req, res) {
         Ingredient.find({}, function (err, ingredientResult) {
             if (err) {
@@ -317,7 +352,7 @@ router.route('/ingredients')
         });
     });
 
-router.route('/quantityTypes')
+    router.route('/quantityTypes')
     .get(function (req, res) {
         QuantityType.find({}, function (err, quantityTypeResult) {
             if (err) {
@@ -346,7 +381,7 @@ router.route('/quantityTypes')
         });
     });
 
-app.use('/api', router);
+    app.use('/api', router);
 
-server.listen(port);
-console.log('DelishDish happens on port ' + port);
+    server.listen(port);
+    console.log('DelishDish happens on port ' + port);

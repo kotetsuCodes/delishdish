@@ -1,0 +1,25 @@
+<div ng-repeat="recipe in $ctrl.recipes track by $index">
+    <div class="collection">
+        <div class="collection-item-10 bgcolor-default color-default align-vertical">
+            <div>
+                {{recipe.name}}
+                <br>
+                <span class="color-primary">Ingredients: {{recipe.ingredients.length}}</span>
+            </div>
+        </div>
+        <div class="collection-item-2 center-text color-primary align-horizontal align-vertical" ng-click="$ctrl.toggleTab(recipe.name)">
+            <i ng-hide="$ctrl.isInActiveTabs(recipe.name)" class="fa fa-angle-right fa-lg" aria-hidden="true"></i>
+            <i ng-show="$ctrl.isInActiveTabs(recipe.name)" class="fa fa-angle-down fa-lg" aria-hidden="true"></i>
+        </div>
+    </div>
+
+    <div class="collection" ng-show="$ctrl.isInActiveTabs(recipe.name)" ng-repeat="ingredient in recipe.ingredients track by $index">
+        <div class="collection-item-10 bgcolor-primary color-default align-vertical">
+            {{ingredient.quantity}} {{ingredient.quantity_type}} of {{ingredient.name}}
+        </div>
+        <div class="collection-item-2 center-text bgcolor-primary color-default align-horizontal align-vertical" ng-click="$ctrl.removeIngredientFromRecipe(recipe, $index)">
+            <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+        </div>
+    </div>  
+
+</div>

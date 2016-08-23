@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var ShoppingListSchema = new Schema({
     name: String,
     email: String,
-    recipes: Schema.Types.Mixed
+    recipeIds: [{type: Schema.Types.ObjectId, ref: 'Recipe'}]
 });
 
 module.exports = mongoose.model('ShoppingList', ShoppingListSchema);

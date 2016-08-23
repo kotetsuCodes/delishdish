@@ -1,0 +1,21 @@
+<div class="row">
+    <div class="col-12-mobile col-12-desktop center-text">
+        <h3>{{$ctrl.shoppinglist.name}} > Full View</h3>
+    </div>
+</div>
+
+<div ng-repeat="recipe in $ctrl.shoppinglist.recipeIds">
+    <div class="row">
+        <div class="col-12-mobile col-12-desktop bgcolor-primary">{{recipe.name}}</div>
+    </div>
+    <div class="row" ng-repeat="ingredient in recipe.ingredients">
+        <div class="col-1-mobile col-1-desktop bgcolor-body"></div>
+        <div class="col-11-mobile col-11-desktop bgcolor-default">{{ingredient.quantity}} {{ingredient.quantity_type}} {{ingredient.name}}</div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12-mobile col-12-desktop">
+        <button class="bgcolor-default" ui-sref="base.shoppinglists">Back to Shopping Lists</button>
+    </div>
+</div>

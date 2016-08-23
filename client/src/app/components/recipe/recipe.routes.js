@@ -17,7 +17,7 @@ export default function routes ($stateProvider) {
             }
         }
     })
-    .state('base.recipes.recipedetails', {
+    .state('base.recipes.details', {
         url: '/details/:id',
         views: {
             'body@': {
@@ -28,7 +28,7 @@ export default function routes ($stateProvider) {
             }
         }
     })
-    .state('base.recipes.addrecipe', {
+    .state('base.recipes.add', {
         url: '/add',
         views: {
             'body@': {
@@ -40,7 +40,7 @@ export default function routes ($stateProvider) {
         }
 
     })
-    .state('base.recipes.editrecipe', {
+    .state('base.recipes.edit', {
         url: '/edit/:id',
         views: {
             'body@': {
