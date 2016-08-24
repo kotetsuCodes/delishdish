@@ -89,14 +89,14 @@
         </div>
     </div>
 
-    <div class="row">
-    <div class="col-12-mobile col-12-desktop align-horizontal center-text">
-    <hr class="color-primary">
-        <h3>Added Ingredients</h3>
-    </div>
+    <div class="row" ng-show="$ctrl.newRecipe.ingredients.length > 0">
+        <div class="col-12-mobile col-12-desktop align-horizontal center-text">
+            <hr class="color-primary">
+            <h3>Added Ingredients</h3>
+        </div>
     </div>
 
-    <div class="row" ng-repeat="ingredient in $ctrl.newRecipe.ingredients track by $index">
+    <div class="row" ng-show="$ctrl.newRecipe.ingredients.length > 0" ng-repeat="ingredient in $ctrl.newRecipe.ingredients track by $index">
         <div class="collection">
             <div class="collection-item-10 align-vertical">
                 {{ingredient.name}}
