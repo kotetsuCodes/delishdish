@@ -1,39 +1,50 @@
 <div class="row">
-
     <div class="col-12-mobile center-text">
         <h3>DELISH DISH</h3>    
     </div>
+</div>
 
-    <form>
-        <div class="col-12-mobile col-12-desktop">
-            <input type="text" ng-model="$ctrl.email" placeholder="Email Address"/>
-        </div> 
+<div class="row">
+    <div class="col-12-mobile col-12-desktop">
+        <input type="text" ng-model="$ctrl.email" placeholder="Email Address"/>
+    </div> 
+</div>
 
-        <div class="col-12-mobile col-12-desktop">
-            <input type="password" ng-model="$ctrl.password" placeholder="Password" />
+<div class="row">
+    <div class="col-12-mobile col-12-desktop">
+        <input type="password" ng-model="$ctrl.password" placeholder="Password" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-2-mobile col-2-desktop">
+        <div ng-show="$ctrl.showBadLoginNotification" class="notification error">
+            <i class="fa fa-exclamation-triangle fa-lg" aria-hidden="true"></i>
         </div>
+    </div>
 
-        <div class="col-2-mobile col-2-desktop">
-            <div ng-show="$ctrl.showBadLoginNotification" class="error">
-                <i class="fa fa-exclamation-triangle fa-lg" aria-hidden="true"></i>
-            </div>
+    <div class="col-10-mobile col-10-desktop">
+        <div ng-show="$ctrl.showBadLoginNotification" class="notification error">
+            {{$ctrl.BadLoginMessage}}
         </div>
+    </div>
 
-        <div class="col-10-mobile col-10-desktop">
-            <div ng-show="$ctrl.showBadLoginNotification" class="error">
-                {{$ctrl.BadLoginMessage}}
-            </div>
+    <div class="col-10-mobile col-10-desktop">
+        <div ng-show="$ctrl.showUnknownErrorNotification" class="notification error">
+            {{$ctrl.showUnknownErrorMessage}}
         </div>
+    </div>
+</div>
 
-        <div class="col-10-mobile col-10-desktop">
-            <div ng-show="$ctrl.showUnknownErrorNotification" class="error">
-                {{$ctrl.showUnknownErrorMessage}}
-            </div>
-        </div>
+<div class="row">
+    <div class="col-5-mobile col-5-desktop">
+        <button class="btn-primary" ng-click="$ctrl.login()">Sign In</button>
+    </div>
+    <div class="col-2-mobile col-2-desktop center-text align-vertical">
+    <div>- OR -</div>
+    </div>
+    <div class="col-5-mobile col-5-desktop">
+        <button class="btn-primary" ng-click="$ctrl.state.go('signup');">Sign Up!</button>
+    </div>
 
-        <div class="col-12-mobile col-12-desktop">
-            <button class="btn-primary" ng-click="$ctrl.login()">Sign In</button>
-        </div>
-
-    </form>
 </div>

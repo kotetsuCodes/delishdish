@@ -5,29 +5,22 @@
 </div>
 
 <div class="row">
-    <div class="col-10-mobile col-10-desktop">
+    <div class="col-12-mobile col-12-desktop">
         <input type="text" ng-model="$ctrl.newShoppinglist.name" placeholder="Shopping List Name">
-    </div>
-    <div class="col-2-mobile col-2-desktop bgcolor-default align-vertical align-horizontal center-text">
-        <span>{{$ctrl.newShoppinglist.recipes.length}}</span> 
     </div>
 </div>
 
 <!--  List of recipes -->
 <div class="row" ng-repeat="recipe in $ctrl.recipes" ng-switch="" on="$index % 3">
-    <div ng-class="{'bgcolor-primary' : $ctrl.newShoppinglist.recipes.indexOf($ctrl.recipes[$index]._id) > -1}" class="col-4-mobile col-4-desktop bgcolor-default center-text" ng-switch-when="0" ng-click="$ctrl.addRecipeToShoppinglist($ctrl.newShoppinglist, $ctrl.recipes[$index])">
+    <div ng-class="{'bgcolor-primary' : $ctrl.findRecipeById($ctrl.recipes[$index]._id, $ctrl.newShoppinglist.recipes) > -1}" class="col-4-mobile col-4-desktop bgcolor-default center-text" ng-switch-when="0" ng-click="$ctrl.addRecipeToShoppinglist($ctrl.newShoppinglist, $ctrl.recipes[$index])">
         <span>{{$ctrl.recipes[$index].name}}</span>
     </div>
-    <div ng-class="{'bgcolor-primary' : $ctrl.newShoppinglist.recipes.indexOf($ctrl.recipes[$index+1]._id) > -1}" class="col-4-mobile col-4-desktop bgcolor-default center-text" ng-show="$ctrl.recipes[$index+1]" ng-switch-when="0" ng-click="$ctrl.addRecipeToShoppinglist($ctrl.newShoppinglist, $ctrl.recipes[$index+1])">
+    <div ng-class="{'bgcolor-primary' : $ctrl.findRecipeById($ctrl.recipes[$index+1]._id, $ctrl.newShoppinglist.recipes) > -1}" class="col-4-mobile col-4-desktop bgcolor-default center-text" ng-show="$ctrl.recipes[$index+1]" ng-switch-when="0" ng-click="$ctrl.addRecipeToShoppinglist($ctrl.newShoppinglist, $ctrl.recipes[$index+1])">
         <span>{{$ctrl.recipes[$index+1].name}}</span>
     </div>
-    <div ng-class="{'bgcolor-primary' : $ctrl.newShoppinglist.recipes.indexOf($ctrl.recipes[$index+2]._id) > -1}" class="col-4-mobile col-4-desktop bgcolor-default center-text" ng-show="$ctrl.recipes[$index+2]" ng-switch-when="0" ng-click="$ctrl.addRecipeToShoppinglist($ctrl.newShoppinglist, $ctrl.recipes[$index+2])">
+    <div ng-class="{'bgcolor-primary' : $ctrl.findRecipeById($ctrl.recipes[$index+2]._id, $ctrl.newShoppinglist.recipes) > -1}" class="col-4-mobile col-4-desktop bgcolor-default center-text" ng-show="$ctrl.recipes[$index+2]" ng-switch-when="0" ng-click="$ctrl.addRecipeToShoppinglist($ctrl.newShoppinglist, $ctrl.recipes[$index+2])">
         <span>{{$ctrl.recipes[$index+2].name}}</span>
     </div>
-
-<div class="">
-    
-</div>
 
     <!-- <div class="col-12-mobile col-12-desktop">
         <div class="collection" ng-repeat="recipe in $ctrl.recipes">
@@ -44,6 +37,24 @@
         </div>
     </div> -->
 </div>
+
+<div class="row" ng-show="$ctrl.newShoppinglist.recipes.length > 0">
+        <div class="col-12-mobile col-12-desktop align-horizontal center-text">
+            <hr class="color-primary">
+            <h3>Added Recipes</h3>
+        </div>
+    </div>
+
+    <div class="row" ng-show="$ctrl.newShoppinglist.recipes.length > 0" ng-repeat="recipe in $ctrl.newShoppinglist.recipes track by $index">
+        <div class="collection">
+            <div class="collection-item-10 align-vertical">
+                {{recipe.name}}
+            </div>
+            <div class="collection-item-2 align-vertical align-horizontal" ng-click="$ctrl.removeRecipeFromCurrentShoppinglist($ctrl.newShoppinglist, $index)">
+                <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
 
 <div class="row">
     <div class="col-6-mobile col-6-desktop">

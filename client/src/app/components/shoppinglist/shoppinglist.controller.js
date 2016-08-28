@@ -50,7 +50,8 @@ export default class ShoppinglistController {
     }
 
     addRecipeToShoppinglist (shoppinglist, recipe) {
-        shoppinglist.recipes.push(recipe._id);
+        // shoppinglist.recipes.push(recipe._id);
+        shoppinglist.recipes.push(recipe);
     }
 
     removeRecipeFromShoppinglist (shoppinglist, index) {
@@ -68,6 +69,10 @@ export default class ShoppinglistController {
         }
     }
 
+    removeRecipeFromCurrentShoppinglist (shoppinglist, index) {
+        shoppinglist.recipes.splice(index, 1);
+    }
+
     toggleTab (name) {
         if (this.activeTabs.indexOf(name) === -1) {
             this.activeTabs.push(name);
@@ -80,13 +85,21 @@ export default class ShoppinglistController {
         return this.activeTabs.indexOf(name) > -1;
     }
 
-    findShoppinglistById(id, array) {
+    findShoppinglistById (id, array) {
         for(var i = 0; i < array.length; i++) {
             if (array[i]._id === id) {
                 return i;
             }
         }
+        return -1;
+    }
 
+    findRecipeById (id, array) {
+        for (let i = 0; i < array.length; i++) {
+            if (array[i]._id === id) {
+                return i;
+            }
+        }
         return -1;
     }
     

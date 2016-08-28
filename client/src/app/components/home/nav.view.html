@@ -11,7 +11,7 @@
         <a>Recipes</a>
     </div>
 
-    <div class="nav-4-mobile nav-4-desktop">
+    <div ng-class="{ navactive: $ctrl.isActive('/profile') }" class="nav-4-mobile nav-4-desktop" ui-sref="base.profile">
         <i class="fa fa-user" aria-hidden="true"></i>
         <br>
         <a>Profile</a>

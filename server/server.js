@@ -33,6 +33,10 @@ var ShoppingList = require('./models/shoppinglist');
 var Ingredient = require('./models/ingredient');
 var QuantityType = require('./models/quantity_type');
 
+// encryption
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 /*
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -48,18 +52,38 @@ app.use(function(req, res, next) {
 // create our router
 var router = express.Router();
 
-router.route('/createAccount')
+router.route('/signup')
 
 .post(function (req, res) {
     var user = new User();
     user.email = req.body.email;
-    user.password = req.body.password;
+    //user.password = req.body.password;
 
-    user.save(function (err, user) {
-        if (err) throw err;
+    bcrypt.genSalt(saltRounds, function(err, salt) {
+        bcrypt.hash(req.body.password, salt, function(err, hash) {
+            // Store hash in your password DB.
 
-        console.log('User Created Successfully');
-        res.json({success: true});
+            user.password = hash;
+            // user.salt = salt;
+
+            user.save(function (err, user) {
+                if (err) {
+                    throw err;
+                }
+
+                var token = jwt.sign({_id: user._id, email: user.email}, app.get('superSecret'), {
+                    expiresIn: 86400 // expires in 24 hours
+                });
+                // return the information including token as JSON
+                console.log('token successful');
+
+                res.json({
+                    success: true,
+                    message: 'Enjoy your token!',
+                    token: token
+                });
+            });
+        });
     });
 });
 
@@ -78,26 +102,33 @@ router.route('/login')
             if (!user) {
                 res.status(401).send({ success: false, message: 'Authentication failed. Email or Password not correct.' });
             } else if (user) {
-              // check if password matches
-              if (user.password !== req.body.password) {
-                res.status(401).send({ success: false, message: 'Authentication failed. Email or Password not correct.' });
-            } else {
-                    // if user is found and password is right
-                    // create a token
-                    var token = jwt.sign({_id: user._id, email: user.email}, app.get('superSecret'), {
-                        expiresIn: 86400 // expires in 24 hours
-                    });
+                // bcrypt.genSalt(saltRounds, function(err, salt) {
+                    //bcrypt.hash(req.body.password, user.salt, function(err, hash) {
+                        // Store hash in your password DB.
+                        //console.log('password hash: ' + hash);
+                        //console.log('user password hash: ' + user.password);
+                        bcrypt.compare(req.body.password, user.password, function(err, result) {
+                            console.log(result);
+                            // check if password matches
+                            if (result !== true) {
+                                res.status(401).send({ success: false, message: 'Authentication failed. Email or Password not correct.' });
+                            } else {
+                                // if user is found and password is right create a token
+                                var token = jwt.sign({_id: user._id, email: user.email}, app.get('superSecret'), {
+                                    expiresIn: 86400 // expires in 24 hours
+                                });
+                                // return the information including token as JSON
+                                console.log('token successful');
 
-                    // return the information including token as JSON
-
-                    console.log('token successful');
-
-                    res.json({
-                        success: true,
-                        message: 'Enjoy your token!',
-                        token: token
-                    });
-                }
+                                res.json({
+                                    success: true,
+                                    message: 'Enjoy your token!',
+                                    token: token
+                                });
+                            }   
+                        });
+                    //});
+                // });
             }
         });
     });
@@ -132,14 +163,55 @@ router.use(function(req, res, next) {
 }
 });
 
+router.route('/user')
+.get(function (req, res) {
+
+    User.findOne({email: req.decoded.email}, function (err, user) {
+        console.log(user);
+        res.json(user);
+    });
+})
+.put(function (req, res) {
+    bcrypt.genSalt(saltRounds, function(err, salt) {
+        bcrypt.hash(req.body.password, salt, function(err, hash) {
+            // Store hash in your password DB.
+
+            if (req.body.password.length > 0) {
+                console.log('user submitted password change');
+                User.findOneAndUpdate({email: req.decoded.email }, { email: req.body.email, password: hash }, function (err, user) {
+                    console.log(err);
+                    if (err) {
+                        return res.status(500).send({
+                            success: false,
+                            message: 'Unexpected error occurred.'
+                        });
+                    }
+                    res.json(user);
+                });
+            } else {
+                console.log('user is not updating password')
+                User.findOneAndUpdate({email: req.decoded.email }, { email: req.body.email }, function (err, user) {
+                    console.log(err);
+                    if (err) {
+                        return res.status(500).send({
+                            success: false,
+                            message: 'Unexpected error occurred.'
+                        });
+                    }
+                    res.json(user);
+                });
+            }
+        });
+    });
+});
+
 router.route('/shoppinglists')
 .get(function (req, res) {
 
     ShoppingList.find({email: req.decoded.email}).populate('recipeIds').exec(function(err, shoppinglists) {
     // list of cars with partIds populated
-    console.log(shoppinglists);
     res.json(shoppinglists);
-    });
+});
 
 
     // let shoppingListPromise = ShoppingList.find({email: req.decoded.email}).exec();
@@ -182,7 +254,11 @@ router.route('/shoppinglists')
 
     shoppinglist.email = req.decoded.email;
     shoppinglist.name = req.body.name;
-    shoppinglist.recipeIds = req.body.recipeIds;
+    shoppinglist.recipeIds = [];
+
+    for (let i = 0; i < req.body.recipeIds.length; i++) {
+        shoppinglist.recipeIds.push(req.body.recipeIds[i]._id);
+    }
 
     shoppinglist.save(function (err, shoppinglist) {
         if (err) {
@@ -263,6 +339,7 @@ router.route('/recipes')
         newRecipe.email = req.decoded.email;
         newRecipe.name = req.body.name;
         newRecipe.ingredients = req.body.ingredients;
+        newRecipe.instructions = req.body.instructions;
 
         newRecipe.save(function (err, newRecipe) {
             if (err) {

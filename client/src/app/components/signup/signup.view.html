@@ -1,0 +1,46 @@
+<div class="row">
+    <div class="col-12-mobile center-text">
+        <h3>SIGN UP</h3>    
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12-mobile col-12-desktop">
+        <input type="text" ng-model="$ctrl.email" placeholder="Email Address"/>
+    </div> 
+</div>
+    
+<div class="row">
+    <div class="col-12-mobile col-12-desktop">
+        <input type="password" ng-model="$ctrl.password" placeholder="Password" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12-mobile col-12-desktop">
+        <input type="password" ng-model="$ctrl.confirmPassword" placeholder="Confirm Password" ng-change="$ctrl.checkPasswords()"/>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12-mobile col-12-desktop">
+        <button class="btn-primary" ng-click="$ctrl.signup()">Sign Up</button>
+    </div>
+</div>
+
+<div class="row" ng-show="$ctrl.notificationMessage !== null">
+    <div class="col-2-mobile col-2-desktop">
+        <div class="notification notice">
+        <i class="fa fa-exclamation-triangle fa-lg" aria-hidden="true"></i>
+        </div>
+    </div>
+    <div class="col-10-mobile col-10-desktop">
+        <div class="notification">{{$ctrl.notificationMessage.message}}</div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12-mobile col-12-desktop bgcolor-default" ng-click="$ctrl.$state.go('login')" style="cursor: pointer;">
+        <div>Already have an account?</div>
+    </div>
+</div>

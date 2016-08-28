@@ -11,8 +11,9 @@ export default class RecipeController {
         this.showQuantityTypeSuggestions = false;
         this.newRecipe = {};
         this.newRecipe.ingredients = [];
+        this.newRecipe.instructions = '';
         this.newIngredient = {};
-        this.currentIngredient = {name: '', quantity_type: 'cup', quantity: 1};
+        this.currentIngredient = {name: '', quantity_type: 'cup', quantity: 1, instructions: ''};
 
         this.$state = $state;
         this.$stateParams = $stateParams;
@@ -99,7 +100,7 @@ export default class RecipeController {
 
             this.recipeService.createRecipe(this.newRecipe)
             .$promise.then(response => {
-                this.recipes.push({name: this.newRecipe.name, calorie_count: this.newRecipe.calorie_count, email: this.newRecipe.email, shared: this.newRecipe.shared, ingredients: this.newRecipe.ingredients});
+                this.recipes.push({ name: this.newRecipe.name, calorie_count: this.newRecipe.calorie_count, email: this.newRecipe.email, shared: this.newRecipe.shared, ingredients: this.newRecipe.ingredients, instructions: this.newRecipe.instructions });
                 this.$state.go('base.recipes');
                 // clear out form bindings
                 // this.newRecipe = {};
