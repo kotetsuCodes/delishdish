@@ -1,5 +1,5 @@
 <div ng-repeat="recipe in $ctrl.recipes track by $index">
-    <div class="collection">
+    <div class="collection" ng-click="$ctrl.toggleTab(recipe.name)">
         <div class="collection-item-10 bgcolor-default color-default align-vertical">
             <div>
                 {{recipe.name}}
@@ -7,18 +7,32 @@
                 <span class="color-primary">Ingredients: {{recipe.ingredients.length}}</span>
             </div>
         </div>
-        <div class="collection-item-2 center-text color-primary align-horizontal align-vertical" ng-click="$ctrl.toggleTab(recipe.name)">
+        <div class="collection-item-2 center-text color-primary align-horizontal align-vertical">
             <i ng-hide="$ctrl.isInActiveTabs(recipe.name)" class="fa fa-angle-right fa-lg" aria-hidden="true"></i>
             <i ng-show="$ctrl.isInActiveTabs(recipe.name)" class="fa fa-angle-down fa-lg" aria-hidden="true"></i>
         </div>
     </div>
 
+    <div class="collection" ng-show="$ctrl.isInActiveTabs(recipe.name)" ui-sref="base.recipes.detail({id: recipe._id})">
+        <div class="collection-item-1 bgcolor-body">
+        </div> 
+        <div class="collection-item-9 color-primary align-vertical align-horizontal">            
+            <span>View Full Recipe</span>
+        </div>
+        <div class="collection-item-2 align-vertical align-horizontal">
+            <i class="fa fa-list-alt fa-lg" aria-hidden="true"></i>
+        </div>
+    </div>
+
     <div class="collection" ng-show="$ctrl.isInActiveTabs(recipe.name)" ng-repeat="ingredient in recipe.ingredients track by $index">
-        <div class="collection-item-10 bgcolor-primary color-default align-vertical">
+        <div class="collection-item-1 bgcolor-body">
+
+        </div>
+        <div class="collection-item-9 bgcolor-default align-vertical">
             {{ingredient.quantity}} {{ingredient.quantity_type}} of {{ingredient.name}}
         </div>
-        <div class="collection-item-2 center-text bgcolor-primary color-default align-horizontal align-vertical" ng-click="$ctrl.removeIngredientFromRecipe(recipe, $index)">
-            <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+        <div class="collection-item-2 center-text bgcolor-default align-horizontal align-vertical" ng-click="$ctrl.removeIngredientFromRecipe(recipe, $index)">
+            <i class="fa fa-times fa-lg color-primary" aria-hidden="true"></i>
         </div>
     </div>  
 

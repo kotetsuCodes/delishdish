@@ -1,5 +1,5 @@
 import templateUrl from './recipe.view.html';
-import recipeDetailsTemplate from './recipedetails.view.html';
+import recipeDetailTemplate from './recipe.detail.view.html';
 import recipeEditTemplate from './recipe.edit.view.html';
 import recipeAddTemplate from './recipe.add.view.html';
 
@@ -17,11 +17,11 @@ export default function routes ($stateProvider) {
             }
         }
     })
-    .state('base.recipes.details', {
-        url: '/details/:id',
+    .state('base.recipes.detail', {
+        url: '/detail/:id',
         views: {
             'body@': {
-                templateUrl: recipeDetailsTemplate,
+                templateUrl: recipeDetailTemplate,
                 controller: 'RecipeController',
                 controllerAs: '$ctrl',
                 bindToController: true

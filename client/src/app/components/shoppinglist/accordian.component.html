@@ -1,5 +1,5 @@
 <div ng-repeat="shoppinglist in $ctrl.shoppinglists track by $index">
-    <div class="collection">
+    <div class="collection" ng-click="$ctrl.toggleTab(shoppinglist.name)">
         <div class="collection-item-10 bgcolor-default color-default align-vertical">
             <div>
                 {{shoppinglist.name}}
@@ -7,28 +7,36 @@
                 <span class="color-primary">Recipes: {{shoppinglist.recipeIds.length}}</span>
             </div>
         </div>
-        <div class="collection-item-2 center-text color-primary align-horizontal align-vertical" ng-click="$ctrl.toggleTab(shoppinglist.name)">
+        <div class="collection-item-2 center-text color-primary align-horizontal align-vertical">
             <i ng-hide="$ctrl.isInActiveTabs(shoppinglist.name)" class="fa fa-angle-right fa-lg" aria-hidden="true"></i>
             <i ng-show="$ctrl.isInActiveTabs(shoppinglist.name)" class="fa fa-angle-down fa-lg" aria-hidden="true"></i>
         </div>
     </div>
 
     <div class="collection" ng-show="$ctrl.isInActiveTabs(shoppinglist.name)" ui-sref="base.shoppinglists.detail({id: shoppinglist._id})">
-        <div class="collection-item-12 bgcolor-primary color-default align-vertical align-horizontal">
-            <i class="fa fa-search fa-lg" aria-hidden="true"></i>&nbsp;
-            <span>Full View</span>
+        <div class="collection-item-1 bgcolor-body">
+
+        </div>
+        <div class="collection-item-9 bgcolor-default color-primary align-vertical align-horizontal">
+            <span>View Full List</span>
+        </div>
+        <div class="collection-item-2 align-vertical align-horizontal">
+            <i class="fa fa-list-alt fa-lg" aria-hidden="true"></i>
         </div>
     </div>
 
     <div class="collection" ng-show="$ctrl.isInActiveTabs(shoppinglist.name)" ng-repeat="recipe in shoppinglist.recipeIds track by $index">
-        <div class="collection-item-10 bgcolor-primary color-default align-vertical">
-            Name: {{recipe.name}}
-            <br>
-            <span>Ingredients: {{recipe.ingredients.length}}</span>
+        <div class="collection-item-1 bgcolor-body">
         </div>
-        <div class="collection-item-2 center-text bgcolor-primary color-default align-horizontal align-vertical" ng-click="$ctrl.removeRecipeFromShoppinglist(shoppinglist, $index)">
+        <div class="collection-item-9 bgcolor-default color-default align-vertical">
+            <div>
+                Name: {{recipe.name}}
+                <br>
+                <span>Ingredients: {{recipe.ingredients.length}}</span>
+            </div>
+        </div>
+        <div class="collection-item-2 center-text color-primary align-horizontal align-vertical" ng-click="$ctrl.removeRecipeFromShoppinglist(shoppinglist, $index)">
             <i class="fa fa-times fa-lg" aria-hidden="true"></i>
         </div>
     </div>  
-
 </div>

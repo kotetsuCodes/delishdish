@@ -40,7 +40,7 @@
 
 <div class="row" ng-show="$ctrl.newShoppinglist.recipes.length > 0">
         <div class="col-12-mobile col-12-desktop align-horizontal center-text">
-            <hr class="color-primary">
+            <hr class="bgcolor-primary" />
             <h3>Added Recipes</h3>
         </div>
     </div>
@@ -51,10 +51,16 @@
                 {{recipe.name}}
             </div>
             <div class="collection-item-2 align-vertical align-horizontal" ng-click="$ctrl.removeRecipeFromCurrentShoppinglist($ctrl.newShoppinglist, $index)">
-                <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+                <i class="fa fa-times fa-lg color-primary" aria-hidden="true"></i>
             </div>
         </div>
     </div>
+
+<div class="row">
+    <div class="col-12-mobile col-12-desktop">
+        <hr class="bgcolor-primary"/>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-6-mobile col-6-desktop">
